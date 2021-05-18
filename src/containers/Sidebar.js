@@ -227,6 +227,7 @@ const useStyles = makeStyles((theme) => ({
   logo: {
     paddingTop: 6,
     paddingBottom: 6,
+    height: 40,
   },
   nested: {
     paddingLeft: theme.spacing(2) + 40, // + minWidth icon
