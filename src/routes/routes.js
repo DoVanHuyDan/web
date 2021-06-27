@@ -10,31 +10,16 @@ const UserForm = React.lazy(() => import('../containers/UserForm'));
 const UpdateMyProfile = React.lazy(() =>
   import('../containers/UpdateMyProfile'),
 );
-const DepartmentList = React.lazy(() => import('../containers/DepartmentList'));
-const DepartmentForm = React.lazy(() => import('../containers/DepartmentForm'));
+const TenantList = React.lazy(() => import('../containers/TenantList'));
+const TenantForm = React.lazy(() => import('../containers/TenantForm'));
 
 // status
 
-const StatusList = React.lazy(() => import('../containers/StatusList'));
-const StatusForm = React.lazy(() => import('../containers/StatusForm'));
+const CategoriesList = React.lazy(() => import('../containers/CategoriesList'));
+const CategoriesForm = React.lazy(() => import('../containers/CategoriesForm'));
 
-//task
-const TaskList = React.lazy(() => import('../containers/TaskList'));
-const TaskForm = React.lazy(() => import('../containers/TaskForm'));
-
-//my user
-const MyUser = React.lazy(() => import('../containers/MyUser'));
-const TaskDepartment = React.lazy(() => import('../containers/TaskDepartment'));
-const UserFormManager = React.lazy(() =>
-  import('../containers/UserFormManager'),
-);
-const MyTask = React.lazy(() => import('../containers/MyTask'));
 const Files = React.lazy(() => import('../containers/Files'));
-const TaskUser = React.lazy(() => import('../containers/TaskUser'));
-const DepartmentListTask = React.lazy(() =>
-  import('../containers/DepartmentListTask'),
-);
-// const TaskForm = React.lazy(() => import('../containers/TaskForm'));
+const FileForm = React.lazy(() => import('../containers/FileForm'));
 
 const routes = [
   {
@@ -66,73 +51,33 @@ const routes = [
     protected: true,
   },
   {
-    path: '/departments',
-    component: DepartmentList,
+    path: '/tenants',
+    component: TenantList,
     protected: true,
   },
   {
-    path: '/departments/create',
-    component: DepartmentForm,
+    path: '/tenants/create',
+    component: TenantForm,
     protected: true,
   },
   {
-    path: '/departments/edit/:id',
-    component: DepartmentForm,
+    path: '/categories',
+    component: CategoriesList,
     protected: true,
   },
   {
-    path: '/status',
-    component: StatusList,
+    path: '/categories/create',
+    component: CategoriesForm,
     protected: true,
   },
   {
     path: '/files/create',
-    component: StatusForm,
+    component: FileForm,
     protected: true,
   },
   {
-    path: '/status/edit/:id',
-    component: StatusForm,
-    protected: true,
-  },
-  {
-    path: '/tasks',
-    component: TaskList,
-    protected: true,
-  },
-  {
-    path: '/tasks/create',
-    component: TaskForm,
-    protected: true,
-  },
-  {
-    path: '/tasks/edit/:id',
-    component: TaskForm,
-    protected: true,
-  },
-  {
-    path: '/department-task',
-    component: DepartmentListTask,
-    protected: true,
-  },
-  {
-    path: '/getTask/:id',
-    component: TaskDepartment,
-    protected: true,
-  },
-  {
-    path: '/myTask',
-    component: MyTask,
-    protected: true,
-  },
-  {
-    path: '/myUser',
-    component: MyUser,
-    protected: true,
-  },
-  {
-    path: '/user-create',
-    component: UserFormManager,
+    path: '/categories/edit/:id',
+    component: CategoriesForm,
     protected: true,
   },
   {

@@ -105,12 +105,12 @@ const ClippedDrawer = React.memo((props) => {
                   disablePadding
                   onClick={() => props.onClose(false)}>
                   <ListItemLink
-                    to="/departments"
+                    to="/tenants"
                     primary="Danh sách công ty"
                     className={classes.nested}
                   />
                   <ListItemLink
-                    to="/departments/create"
+                    to="/tenants/create"
                     primary="Thêm công ty"
                     className={classes.nested}
                   />
@@ -132,12 +132,12 @@ const ClippedDrawer = React.memo((props) => {
                   disablePadding
                   onClick={() => props.onClose(false)}>
                   <ListItemLink
-                    to="/status"
+                    to="/categories"
                     primary="Danh sách danh mục"
                     className={classes.nested}
                   />
                   <ListItemLink
-                    to="/status/create"
+                    to="/categories/create"
                     primary="Thêm danh mục"
                     className={classes.nested}
                   />
