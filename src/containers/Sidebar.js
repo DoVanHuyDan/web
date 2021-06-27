@@ -123,7 +123,7 @@ const ClippedDrawer = React.memo((props) => {
                 <ListItemIcon classes={{root: classes.icon}}>
                   <InboxIcon />
                 </ListItemIcon>
-                <ListItemTextMenu primary="Quản lý danh mục" />
+                <ListItemTextMenu primary="Quản lý danh mục " />
                 {openTM ? <ExpandLess /> : <ExpandMore />}
               </ListItemMenu>
               <Collapse in={openTM} timeout="auto" unmountOnExit>
