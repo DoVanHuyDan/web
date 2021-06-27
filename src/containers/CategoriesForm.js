@@ -70,7 +70,7 @@ const StatusForm = React.memo((props) => {
         });
       }
       if (res.success) {
-        history.push('/status');
+        history.push('/categories');
       }
     },
   });

@@ -107,7 +107,7 @@ const StatusList = React.memo((props) => {
             variant="contained"
             className={classes.topButton}
             startIcon={<AddIcon />}
-            onClick={() => history.push('/status/create')}>
+            onClick={() => history.push('/categories/create')}>
             Thêm mới
           </Button>
         </Grid>
@@ -138,7 +138,7 @@ const StatusList = React.memo((props) => {
                         Sửa
                       </Button>
                     ),
-                    onClick: (id) => history.push(`/status/edit/${id}`),
+                    onClick: (id) => history.push(`/categories/edit/${id}`),
                   },
                   {
                     component: (

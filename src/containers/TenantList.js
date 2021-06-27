@@ -154,7 +154,7 @@ const DepartmentList = React.memo((props) => {
                         Sửa
                       </Button>
                     ),
-                    onClick: (id) => history.push(`/departments/edit/${id}`),
+                    onClick: (id) => history.push(`/tenants/edit/${id}`),
                   },
                   {
                     component: (

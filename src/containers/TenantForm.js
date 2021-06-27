@@ -69,7 +69,7 @@ const DepartmentForm = React.memo((props) => {
         });
       }
       if (res.success) {
-        history.push('/departments');
+        history.push('/tenants');
       }
     },
   });
