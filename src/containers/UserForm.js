@@ -1,4 +1,4 @@
-import React, {Fragment, useEffect} from 'react';
+import React, {Fragment, useEffect, useContext} from 'react';
 import {useTranslation} from 'react-i18next';
 import {useHistory, useParams} from 'react-router-dom';
 import {useFormik} from 'formik';
@@ -12,6 +12,7 @@ import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import MenuItem from '@material-ui/core/MenuItem';
+import {AuthContext} from './Auth/AuthProvider';
 
 import * as api from '../common/api';
 import {useApiFetchData} from '../common/hooks';
@@ -25,11 +26,8 @@ const UserForm = React.memo((props) => {
   const history = useHistory();
   const {id} = useParams();
   const {enqueueSnackbar} = useSnackbar();
+  const auth = useContext(AuthContext);
 
-  const [depRes, departments, isFetchedDepartmentData] = useApiFetchData({
-    resource: 'departments',
-    options: {per_page: 1000},
-  });
   const [userRes, user, isFetchedUserData] = useApiFetchData({
     resource: 'users',
     id: id || null,
@@ -38,8 +36,8 @@ const UserForm = React.memo((props) => {
   const formik = useFormik({
     initialValues: {
       name: '',
-      departmentId: '',
-      position: '',
+      tenantId: '',
+      position: 0,
       email: '',
       password: '',
       gender: '',
@@ -49,13 +47,11 @@ const UserForm = React.memo((props) => {
     validationSchema: id // id ? schema for update : schema for create
       ? yup.object().shape({
           name: yup.string(),
-          position: yup.string(),
           email: yup.string().email('Email không đúng định dang'),
           password: yup.string(),
         })
       : yup.object().shape({
           name: yup.string().required('Tên không được bỏ trống'),
-          position: yup.string().required('Chức vụ không được bỏ trống'),
           email: yup
             .string()
             .required('Email không được bỏ trống')
@@ -64,9 +60,9 @@ const UserForm = React.memo((props) => {
         }),
     onSubmit: async (values) => {
       let formData = {};
+      formData.tenant_id = auth?.user?.tenant_id;
+      formData.position = 0;
       if (values.name) formData.name = values.name;
-      if (values.departmentId) formData.department_id = values.departmentId;
-      if (values.position) formData.position = values.position;
       if (values.email) formData.email = values.email;
       if (values.password) formData.password = values.password;
       if (values.gender) formData.gender = values.gender;
@@ -108,7 +104,7 @@ const UserForm = React.memo((props) => {
   });
 
   useEffect(() => {
-    if (user && departments) {
+    if (user) {
       formik.setFieldValue('name', user.name);
       if (user.department_id) {
         formik.setFieldValue('departmentId', user.department_id);
@@ -127,7 +123,7 @@ const UserForm = React.memo((props) => {
       }
       formik.setFieldValue('email', user.email);
     }
-  }, [user, departments]);
+  }, [user]);
 
   const classes = useStyles();
 
@@ -144,7 +140,7 @@ const UserForm = React.memo((props) => {
         className={classes.form}
         component="form"
         onSubmit={formik.handleSubmit}>
-        {!isFetchedDepartmentData || !isFetchedUserData ? (
+        {!isFetchedUserData ? (
           <Loading />
         ) : (
           <Fragment>
@@ -166,74 +162,6 @@ const UserForm = React.memo((props) => {
                       helperText={formik.touched.name && formik.errors.name}
                       fullWidth
                     />
-                  </Grid>
-                </Grid>
-
-                <Grid container className={classes.groupInput}>
-                  <Grid item xs={12} md={2}>
-                    <Typography variant="subtitle1">Phòng ban</Typography>
-                  </Grid>
-                  <Grid item xs={12} md={4}>
-                    {isFetchedDepartmentData && (
-                      <TextField
-                        select
-                        variant="outlined"
-                        size="small"
-                        name="departmentId"
-                        value={formik.values.departmentId}
-                        onChange={formik.handleChange('departmentId')}
-                        onBlur={formik.handleBlur('departmentId')}
-                        error={
-                          formik.touched.departmentId &&
-                          formik.errors.departmentId
-                        }
-                        helperText={
-                          formik.touched.departmentId &&
-                          formik.errors.departmentId
-                        }
-                        fullWidth>
-                        <MenuItem value="">{t('none')}</MenuItem>
-                        {departments?.map((item) => (
-                          <MenuItem key={item.id} value={item.id}>
-                            {item.name}
-                          </MenuItem>
-                        ))}
-                      </TextField>
-                    )}
-                  </Grid>
-                </Grid>
-
-                <Grid container className={classes.groupInput}>
-                  <Grid item xs={12} md={2}>
-                    <Typography variant="subtitle1">Chức vụ</Typography>
-                  </Grid>
-                  <Grid item xs={12} md={4}>
-                    <TextField
-                      select
-                      variant="outlined"
-                      size="small"
-                      name="position"
-                      value={formik.values.position}
-                      onChange={formik.handleChange('position')}
-                      onBlur={formik.handleBlur('position')}
-                      error={formik.touched.position && formik.errors.position}
-                      helperText={
-                        formik.touched.position && formik.errors.position
-                      }
-                      fullWidth>
-                      <MenuItem key={positions.STAFF} value={positions.STAFF}>
-                        Nhân viên
-                      </MenuItem>
-                      <MenuItem
-                        key={positions.MANAGER}
-                        value={positions.MANAGER}>
-                        Quản trị viên
-                      </MenuItem>
-                      <MenuItem key={positions.ADMIN} value={positions.ADMIN}>
-                        Admin
-                      </MenuItem>
-                      )){'}'}
-                    </TextField>
                   </Grid>
                 </Grid>
 

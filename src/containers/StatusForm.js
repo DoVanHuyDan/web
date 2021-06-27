@@ -1,4 +1,4 @@
-import React, {Fragment, useEffect} from 'react';
+import React, {Fragment, useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {useHistory, useParams} from 'react-router-dom';
 import {useFormik} from 'formik';
@@ -16,37 +16,34 @@ import * as api from '../common/api';
 import {useApiFetchData} from '../common/hooks';
 import Loading from '../components/Loading';
 import BackdropLoading from '../components/BackdropLoading';
+import MenuItem from '@material-ui/core/MenuItem';
 //-------------------------------------
 
 const StatusForm = React.memo((props) => {
   const {t} = useTranslation();
   const history = useHistory();
-  const {id} = useParams();
   const {enqueueSnackbar} = useSnackbar();
+  const [file, setFile] = useState();
 
   const [depRes, status, isFetchedData] = useApiFetchData({
     resource: 'categories',
-    id: id || null,
   });
 
   const formik = useFormik({
     initialValues: {
       name: '',
+      category_id: 1,
     },
     validationSchema: yup.object().shape({
-      name: yup.string().required('Tên danh mục không được bỏ trống'),
+      name: yup.string().required('Tên file không được bỏ trống'),
     }),
     onSubmit: async (values) => {
-      let res;
-      if (id) {
-        res = await api.updateResource('categories', id, {
-          name: values.name,
-        });
-      } else {
-        res = await api.createResource('categories', {
-          name: values.name,
-        });
-      }
+      const formData = new FormData();
+      formData.append('name', values.name);
+      formData.append('category_id', values.category_id);
+      formData.append('newFiles', file);
+
+      let res = await api.createResource('files', formData);
 
       if (res.errors) {
         formik.setErrors(res.errors);
@@ -70,16 +67,17 @@ const StatusForm = React.memo((props) => {
         });
       }
       if (res.success) {
-        history.push('/status');
+        history.push('/my-files');
       }
     },
   });
 
-  useEffect(() => {
-    if (status) {
-      formik.setFieldValue('name', status.name);
+  const onFileChange = (event) => {
+    // Update the state
+    if (event.target.files[0]) {
+      setFile(event.target.files[0]);
     }
-  }, [status]);
+  };
 
   const classes = useStyles();
 
@@ -88,7 +86,7 @@ const StatusForm = React.memo((props) => {
       {formik.isSubmitting && <BackdropLoading />}
 
       <Typography variant="h5" component="h4" gutterBottom>
-        {id ? 'Cập nhật danh mục' : 'Thêm mới danh mục'}
+        {'Thêm mới File'}
       </Typography>
 
       <Paper
@@ -104,7 +102,7 @@ const StatusForm = React.memo((props) => {
               <Grid container>
                 <Grid container className={classes.groupInput}>
                   <Grid item xs={12} md={3}>
-                    <Typography variant="subtitle1">Tên danh mục</Typography>
+                    <Typography variant="subtitle1">Tên File</Typography>
                   </Grid>
                   <Grid item xs={12} md={6}>
                     <TextField
@@ -118,6 +116,49 @@ const StatusForm = React.memo((props) => {
                       helperText={formik.touched.name && formik.errors.name}
                       fullWidth
                     />
+                  </Grid>
+                </Grid>
+
+                <Grid container className={classes.groupInput}>
+                  <Grid item xs={12} md={3}>
+                    <Typography variant="subtitle1">File</Typography>
+                  </Grid>
+                  <Grid item xs={12} md={4}>
+                    <TextField
+                      type="file"
+                      variant="outlined"
+                      size="small"
+                      name="file"
+                      onChange={onFileChange}
+                      fullWidth
+                    />
+                  </Grid>
+                </Grid>
+
+                <Grid container className={classes.groupInput}>
+                  <Grid item xs={12} md={3}>
+                    <Typography variant="subtitle1">Danh mục</Typography>
+                  </Grid>
+                  <Grid item xs={12} md={4}>
+                    <TextField
+                      select
+                      variant="outlined"
+                      size="small"
+                      name="statusId"
+                      value={formik.values.statusId}
+                      onChange={formik.handleChange('statusId')}
+                      onBlur={formik.handleBlur('statusId')}
+                      error={formik.touched.statusId && formik.errors.statusId}
+                      helperText={
+                        formik.touched.statusId && formik.errors.statusId
+                      }
+                      fullWidth>
+                      {status?.map((item) => (
+                        <MenuItem key={item.id} value={item.id}>
+                          {item.name}
+                        </MenuItem>
+                      ))}
+                    </TextField>
                   </Grid>
                 </Grid>
               </Grid>
@@ -134,14 +175,14 @@ const StatusForm = React.memo((props) => {
                 variant="contained"
                 color="primary"
                 disableElevation>
-                Lưu
+                Upload
               </Button>
               <Button
                 className={classes.button}
                 variant="contained"
                 disableElevation
                 onClick={() => history.goBack()}>
-                Xoá
+                Quay lại
               </Button>
             </Grid>
           </Fragment>

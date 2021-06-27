@@ -27,7 +27,7 @@ import BackdropLoading from '../components/BackdropLoading';
 import CustomizedTables from '../components/CustomizedTable';
 //-------------------------------------
 
-const UserList = React.memo((props) => {
+const Files = React.memo((props) => {
   const {t} = useTranslation();
   const history = useHistory();
   const dialog = useDialog();
@@ -36,31 +36,30 @@ const UserList = React.memo((props) => {
   const [backdropLoading, setBackdropLoading] = useState(false);
 
   const [userRes, users, isFetchedUserData, refetch] = useApiFetchData({
-    resource: 'get-users',
+    resource: 'files',
     options: {per_page: 10},
   });
-  const [depRes, tenants, isFetchedTenantData] = useApiFetchData({
-    resource: 'tenants',
+  const [depRes, categories, isFetchedCategoryData] = useApiFetchData({
+    resource: 'categories',
     options: {per_page: 1000},
   });
   const [dataTable, setDataTable] = useState([]);
 
   useEffect(() => {
-    if (users && tenants) {
+    if (users && categories) {
       let data = [];
       each(users, (u) => {
         data.push({
           id: u.id,
           name: u.name,
-          gender: u.gender,
-          phone: u.phone,
-          email: u.email,
-          address: u.address,
+          creator: u?.creator?.name,
+          category: u?.category?.name,
+          date: u.created_at,
         });
       });
       setDataTable(data);
     }
-  }, [users, tenants]);
+  }, [users, categories]);
 
   const formik = useFormik({
     initialValues: {
@@ -73,8 +72,8 @@ const UserList = React.memo((props) => {
       if (values.name) {
         formData.name = values.name;
       }
-      if (values.tenantId) {
-        formData.tenant_id = values.tenantId;
+      if (values.categoryId) {
+        formData.category_id = values.categoryId;
       }
       const res = await api.searchUser(formData);
       if (res?.success) {
@@ -83,10 +82,9 @@ const UserList = React.memo((props) => {
           data.push({
             id: u.id,
             name: u.name,
-            gender: u.gender,
-            phone: u.phone,
-            email: u.email,
-            address: u.address,
+            creator: u?.creator?.name,
+            category: u?.category?.name,
+            date: u.created_at,
           });
         });
         setDataTable(data);
@@ -104,7 +102,7 @@ const UserList = React.memo((props) => {
     refetch({page, per_page});
   };
 
-  const handleDeleteUser = async (id) => {
+  const handleDeleteFile = async (id) => {
     try {
       await dialog({
         type: 'confirm',
@@ -135,24 +133,20 @@ const UserList = React.memo((props) => {
 
   const headerTable = [
     {
-      label: 'Tên nhân viên',
+      label: 'Tên file',
       field: 'name',
     },
     {
-      label: 'Giới tính',
-      field: 'gender',
+      label: 'Người đăng',
+      field: 'creator',
     },
     {
-      label: 'SĐT',
-      field: 'phone',
+      label: 'Danh mục',
+      field: 'category',
     },
     {
-      label: 'Email',
-      field: 'email',
-    },
-    {
-      label: 'Địa chỉ',
-      field: 'address',
+      label: 'Ngày đăng',
+      field: 'date',
     },
   ];
 
@@ -167,7 +161,7 @@ const UserList = React.memo((props) => {
         justify="space-between">
         <Grid item>
           <Typography variant="h5" component="h4" gutterBottom>
-            Danh sách nhân viên
+            Danh sách Files
           </Typography>
         </Grid>
         <Grid item>
@@ -175,8 +169,8 @@ const UserList = React.memo((props) => {
             variant="contained"
             className={classes.topButton}
             startIcon={<AddIcon />}
-            onClick={() => history.push('/users/create')}>
-            Thêm mới
+            onClick={() => history.push('/files/create')}>
+            Upload
           </Button>
         </Grid>
       </Grid>
@@ -184,7 +178,7 @@ const UserList = React.memo((props) => {
       <Grid container>
         <Grid item xs>
           <Paper variant="outlined" className={classes.paperWrapper}>
-            {!isFetchedUserData || !isFetchedTenantData ? (
+            {!isFetchedUserData || !isFetchedCategoryData ? (
               <Loading />
             ) : (
               <Fragment>
@@ -202,7 +196,7 @@ const UserList = React.memo((props) => {
                       alignItems="center">
                       <Grid item container direction="row" xs={12} md={6}>
                         <Grid item xs={12} sm={4} container alignItems="center">
-                          <Typography>Họ và tên</Typography>
+                          <Typography>Tên file</Typography>
                         </Grid>
                         <Grid item xs={12} sm={8} container alignItems="center">
                           <TextField
@@ -250,9 +244,8 @@ const UserList = React.memo((props) => {
                           className={classes.tableActionButton}
                           variant="contained"
                           size="small"
-                          disableElevation
-                          startIcon={<EditIcon />}>
-                          Sửa
+                          disableElevation>
+                          Download
                         </Button>
                       ),
                       onClick: (id) => history.push(`/users/edit/${id}`),
@@ -269,7 +262,7 @@ const UserList = React.memo((props) => {
                           Xoá
                         </Button>
                       ),
-                      onClick: (id) => handleDeleteUser(id),
+                      onClick: (id) => handleDeleteFile(id),
                     },
                   ]}
                 />
@@ -313,4 +306,4 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default UserList;
+export default Files;

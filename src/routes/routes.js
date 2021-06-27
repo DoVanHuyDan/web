@@ -29,6 +29,7 @@ const UserFormManager = React.lazy(() =>
   import('../containers/UserFormManager'),
 );
 const MyTask = React.lazy(() => import('../containers/MyTask'));
+const Files = React.lazy(() => import('../containers/Files'));
 const TaskUser = React.lazy(() => import('../containers/TaskUser'));
 const DepartmentListTask = React.lazy(() =>
   import('../containers/DepartmentListTask'),
@@ -85,7 +86,7 @@ const routes = [
     protected: true,
   },
   {
-    path: '/status/create',
+    path: '/files/create',
     component: StatusForm,
     protected: true,
   },
@@ -135,8 +136,8 @@ const routes = [
     protected: true,
   },
   {
-    path: '/task-user',
-    component: TaskUser,
+    path: '/my-files',
+    component: Files,
     protected: true,
   },
 ];

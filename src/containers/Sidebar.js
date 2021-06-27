@@ -61,7 +61,7 @@ const ClippedDrawer = React.memo((props) => {
       <div className={classes.menuList}>
         {auth.user?.position === 2 && (
           <div>
-            {/* <List>
+            <List>
               <ListItemMenu
                 button
                 onClick={() => setOpenUM(!openUM)}
@@ -89,7 +89,7 @@ const ClippedDrawer = React.memo((props) => {
                   />
                 </List>
               </Collapse>
-            </List> */}
+            </List>
 
             <List>
               <ListItemMenu button onClick={() => setOpenAM(!openAM)}>
@@ -147,32 +147,49 @@ const ClippedDrawer = React.memo((props) => {
           </div>
         )}
 
-        <Divider />
-
         {auth.user?.position === 1 && (
           <div>
             <List>
-              <ListItemLink to="/myTask" primary="Công việc trong phòng" />
-            </List>
-            <List>
-              <ListItemLink to="/tasks/create" primary="Thêm công việc" />
-            </List>
-            <List>
-              <ListItemLink to="/myUser" primary="Nhân viên trong phòng" />
-            </List>
-            <List>
-              <ListItemLink to="/user-create" primary="Thêm nhân viên" />
+              <ListItemMenu
+                button
+                onClick={() => setOpenUM(!openUM)}
+                classes={{button: classes.button}}>
+                <ListItemIcon classes={{root: classes.icon}}>
+                  <PeopleAltIcon />
+                </ListItemIcon>
+                <ListItemTextMenu primary="Quản lý nhân viên" />
+                {openUM ? <ExpandLess /> : <ExpandMore />}
+              </ListItemMenu>
+              <Collapse in={openUM} timeout="auto" unmountOnExit>
+                <List
+                  component="div"
+                  disablePadding
+                  onClick={() => props.onClose(false)}>
+                  <ListItemLink
+                    to="/users"
+                    primary="Danh sách nhân viên"
+                    className={classes.nested}
+                  />
+                  <ListItemLink
+                    to="/users/create"
+                    primary="Thêm nhân viên"
+                    className={classes.nested}
+                  />
+                </List>
+              </Collapse>
             </List>
           </div>
         )}
 
-        {auth.user?.position === 0 && (
-          <div>
-            <List>
-              <ListItemLink to="/task-user" primary="Công việc của tôi" />
-            </List>
-          </div>
-        )}
+        <Divider />
+
+        {/* {auth.user?.position === 0 && ( */}
+        <div>
+          <List>
+            <ListItemLink to="/my-files" primary="Danh sách files" />
+          </List>
+        </div>
+        {/* )} */}
       </div>
     </Drawer>
   );
