@@ -15,6 +15,9 @@ const TenantForm = React.lazy(() => import('../containers/TenantForm'));
 
 // status
 
+const StaffList = React.lazy(() => import('../containers/StaffList'));
+const StaffForm = React.lazy(() => import('../containers/StaffForm'));
+
 const CategoriesList = React.lazy(() => import('../containers/CategoriesList'));
 const CategoriesForm = React.lazy(() => import('../containers/CategoriesForm'));
 
@@ -43,6 +46,21 @@ const routes = [
   {
     path: '/users/edit/:id',
     component: UserForm,
+    protected: true,
+  },
+  {
+    path: '/accounts',
+    component: StaffList,
+    protected: true,
+  },
+  {
+    path: '/accounts/create',
+    component: StaffForm,
+    protected: true,
+  },
+  {
+    path: '/accounts/edit/:id',
+    component: StaffForm,
     protected: true,
   },
   {

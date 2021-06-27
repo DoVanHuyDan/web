@@ -69,7 +69,7 @@ const ClippedDrawer = React.memo((props) => {
                 <ListItemIcon classes={{root: classes.icon}}>
                   <PeopleAltIcon />
                 </ListItemIcon>
-                <ListItemTextMenu primary="Quản lý nhân viên" />
+                <ListItemTextMenu primary="Quản lý tài khoản" />
                 {openUM ? <ExpandLess /> : <ExpandMore />}
               </ListItemMenu>
               <Collapse in={openUM} timeout="auto" unmountOnExit>
@@ -78,13 +78,13 @@ const ClippedDrawer = React.memo((props) => {
                   disablePadding
                   onClick={() => props.onClose(false)}>
                   <ListItemLink
-                    to="/users"
-                    primary="Danh sách nhân viên"
+                    to="/accounts"
+                    primary="Danh sách tài khoản"
                     className={classes.nested}
                   />
                   <ListItemLink
-                    to="/users/create"
-                    primary="Thêm nhân viên"
+                    to="/accounts/create"
+                    primary="Thêm tài khoản"
                     className={classes.nested}
                   />
                 </List>

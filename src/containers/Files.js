@@ -14,6 +14,7 @@ import AddIcon from '@material-ui/icons/Add';
 import ListAltIcon from '@material-ui/icons/ListAlt';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
+import Axios from 'axios';
 
 import each from 'lodash/each';
 import find from 'lodash/find';
@@ -127,6 +128,10 @@ const Files = React.memo((props) => {
       }
       setBackdropLoading(false);
     } catch (e) {}
+  };
+
+  const handleDownloadFile = async (id) => {
+    const res = await api.downLoadFile('download', id);
   };
 
   const classes = useStyles();
@@ -248,21 +253,7 @@ const Files = React.memo((props) => {
                           Download
                         </Button>
                       ),
-                      onClick: (id) => history.push(`/users/edit/${id}`),
-                    },
-                    {
-                      component: (
-                        <Button
-                          className={classes.tableActionButton}
-                          variant="contained"
-                          color="secondary"
-                          size="small"
-                          disableElevation
-                          startIcon={<DeleteIcon />}>
-                          Xoá
-                        </Button>
-                      ),
-                      onClick: (id) => handleDeleteFile(id),
+                      onClick: (id) => handleDownloadFile(id),
                     },
                   ]}
                 />

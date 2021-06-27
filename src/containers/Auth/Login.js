@@ -165,17 +165,7 @@ const Login = React.memo((props) => {
               error={formik.touched.password && formik.errors.password}
               helperText={formik.touched.password && formik.errors.password}
             />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  name="remember"
-                  color="primary"
-                  value={formik.values.remember}
-                  onChange={formik.handleChange('remember')}
-                />
-              }
-              label="Ghi nhớ đăng nhập"
-            />
+
             <Button
               type="submit"
               fullWidth
@@ -191,13 +181,6 @@ const Login = React.memo((props) => {
                 'Đăng nhập'
               )}
             </Button>
-            <Grid container>
-              <Grid item xs>
-                <Link href="#" variant="body2" onClick={handleClickOpenDialog}>
-                  Quên mật khẩu
-                </Link>
-              </Grid>
-            </Grid>
           </form>
         </div>
       </Container>

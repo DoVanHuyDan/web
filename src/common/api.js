@@ -134,6 +134,23 @@ export const deleteResource = async (resource, id) => {
   }
 };
 
+export const downLoadFile = async (resource, id) => {
+  try {
+    const res = await apiProtected.post(`/${resource}/${id}`, {
+      responseType: 'blob',
+    });
+    const url = window.URL.createObjectURL(new Blob([res]));
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', 'file.png');
+    document.body.appendChild(link);
+    link.click();
+    return res.data;
+  } catch (e) {
+    return {error: 'server_error'};
+  }
+};
+
 export const getFileUrl = () => {
   return `${API_URL}/files`;
 };

@@ -36,7 +36,7 @@ const UserList = React.memo((props) => {
   const [backdropLoading, setBackdropLoading] = useState(false);
 
   const [userRes, users, isFetchedUserData, refetch] = useApiFetchData({
-    resource: 'get-users',
+    resource: 'accounts',
     options: {per_page: 10},
   });
   const [depRes, tenants, isFetchedTenantData] = useApiFetchData({
@@ -55,6 +55,7 @@ const UserList = React.memo((props) => {
           gender: u.gender,
           phone: u.phone,
           email: u.email,
+          position: u.position === 1 ? 'Doanh nghiệp' : 'Admin',
           address: u.address,
         });
       });
@@ -86,6 +87,7 @@ const UserList = React.memo((props) => {
             gender: u.gender,
             phone: u.phone,
             email: u.email,
+            position: u.position === 1 ? 'Doanh nghiệp' : 'Admin',
             address: u.address,
           });
         });
@@ -139,8 +141,8 @@ const UserList = React.memo((props) => {
       field: 'name',
     },
     {
-      label: 'Giới tính',
-      field: 'gender',
+      label: 'Loại tài khoản',
+      field: 'position',
     },
     {
       label: 'SĐT',
@@ -166,17 +168,12 @@ const UserList = React.memo((props) => {
         alignItems="flex-end"
         justify="space-between">
         <Grid item>
-          <Typography variant="h5" component="h4" gutterBottom>
-            Danh sách nhân viên
-          </Typography>
-        </Grid>
-        <Grid item>
           <Button
             variant="contained"
             className={classes.topButton}
             startIcon={<AddIcon />}
-            onClick={() => history.push('/users/create')}>
-            Thêm mới
+            onClick={() => history.push('/accounts/create')}>
+            Tạo tài khoản
           </Button>
         </Grid>
       </Grid>
@@ -255,7 +252,7 @@ const UserList = React.memo((props) => {
                           Sửa
                         </Button>
                       ),
-                      onClick: (id) => history.push(`/users/edit/${id}`),
+                      onClick: (id) => history.push(`/accounts/edit/${id}`),
                     },
                   ]}
                 />
